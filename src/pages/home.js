@@ -1,5 +1,7 @@
-import profile from "../images/black logo.jpg";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { useGetUserInfo } from "../hooks/useGetUserInfo";
 import {
   BarChart,
   Bar,
@@ -16,20 +18,15 @@ import { BsInfoSquare } from "react-icons/bs";
 import { MdOutlineLocalPhone } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 import { VscThreeBars } from "react-icons/vsc";
+import { auth } from "../config/config";
 
 export const Home = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const toggleMode = () => {
-    setIsDarkMode((prevMode) => !prevMode);
-  };
-
   const [isOpen, setIsOpen] = useState(false);
+  const { profilephoto } = useGetUserInfo();
+  const { name } = useGetUserInfo();
+  const navigate = useNavigate();
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  // graphs
   const data = [
     {
       name: "Mon",
@@ -75,6 +72,20 @@ export const Home = () => {
     },
   ];
 
+  const toggleMode = () => {
+    setIsDarkMode((prevMode) => !prevMode);
+  };
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    localStorage.clear();
+    navigate("/");
+  };
+
   return (
     <div
       className={`Home ${
@@ -90,14 +101,14 @@ export const Home = () => {
           <div className="profile">
             <img
               className="rounded-circle"
-              src={profile}
+              src={profilephoto}
               alt="Logo"
               width="34"
               height="34"
             />
           </div>
           <div className="name">
-            <h2>Nishnat Patil</h2>
+            <h2>{name}</h2>
           </div>
           <div className="hamburger">
             <div onClick={toggleMenu}>
@@ -153,8 +164,12 @@ export const Home = () => {
             <h3 className="menu_i">Blog</h3>
           </div>
           <div className="menu_item">
-            <FaPhoneAlt size="23px" />
-            <h3 className="menu_i">Pricing</h3>
+            <button
+              className="btn text-light h3 bg-danger "
+              onClick={handleLogout}
+            >
+              LogOut
+            </button>
           </div>
         </div>
         <div
@@ -235,7 +250,7 @@ export const Home = () => {
           </div>
 
           <div className="day_steps d-flex">
-            <div className="steps_1">
+            <div className="steps_2">
               <div
                 className={`card ${
                   isDarkMode
@@ -250,7 +265,7 @@ export const Home = () => {
                 </div>
               </div>
             </div>
-            <div className="steps_1">
+            <div className="steps_2">
               <div
                 className={`card bg-opacity-25 ${
                   isDarkMode
@@ -265,7 +280,7 @@ export const Home = () => {
                 </div>
               </div>
             </div>
-            <div className="steps_1">
+            <div className="steps_2">
               <div
                 className={`card bg-opacity-25 ${
                   isDarkMode
@@ -280,7 +295,7 @@ export const Home = () => {
                 </div>
               </div>
             </div>
-            <div className="steps_1">
+            <div className="steps_2">
               <div
                 className={`card bg-opacity-25 ${
                   isDarkMode
@@ -308,10 +323,10 @@ export const Home = () => {
           }`}
         >
           <div className="pic">
-            <img src={profile} alt="Pofile" srcset="" />
+            <img src={profilephoto} alt="Pofile" srcset="" />
           </div>
           <div className="name">
-            <h2>Nishnat Patil</h2>
+            <h2>{name}</h2>
           </div>
           <div className="toggle_ham">
             <label className="switch">
@@ -336,10 +351,13 @@ export const Home = () => {
             <h3 className="menu_i_">Services</h3>
           </div>
           <div className="ham_menu_item">
-            <FaPhoneAlt size="23px" />
-            <h3 className="menu_i_">Blog</h3>
+            <button
+              className="btn text-light h3 bg-danger "
+              onClick={handleLogout}
+            >
+              LogOut
+            </button>
           </div>
-          <div className="ham_menu_item"></div>
         </div>
       )}
     </div>

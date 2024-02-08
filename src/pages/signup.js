@@ -1,33 +1,38 @@
 import { auth, provider, db } from "../config/config";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { doc, setDoc } from "firebase/firestore";
 import logo from "../images/fitness app logo.jpeg";
 import "../styles/style.css";
-// import { useGetUserInfo } from "../../hooks/useGetUserinfo";
+import { useEffect } from "react";
 
 export const SignUp = () => {
   const navigate = useNavigate();
-  // const isAuth = useGetUserInfo();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate("/home");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
 
   const signinwithgoogle = async () => {
     const result = await signInWithPopup(auth, provider);
     const userinfo = {
       userid: result.user.uid,
       name: result.user.displayName,
+      email: result.user.email,
       profilephoto: result.user.photoURL,
       isAuth: true,
     };
     localStorage.setItem("auth", JSON.stringify(userinfo));
+    navigate("/home");
     await setDoc(doc(db, "users", userinfo.userid), userinfo);
     alert("Sign in successfully");
-    navigate("/home");
   };
-
-  // if (isAuth) {
-  //   return <Navigate to="/home" />;
-  // }
-
   return (
     <div className="container m-3">
       <div className="msg">
