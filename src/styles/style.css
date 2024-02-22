@@ -63,10 +63,14 @@
   width: 13%;
   height: 100%;
 }
+.running {
+  height: 100px;
+}
 .data {
   height: 100%;
   width: 85%;
 }
+
 .content {
   display: flex;
   transition: 0.5s ease-in-out all;

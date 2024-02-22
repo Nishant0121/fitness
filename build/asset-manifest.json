@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.2997baa1.css",
-    "main.js": "/static/js/main.9d5b8a39.js",
-    "static/media/fitness app logo.jpeg": "/static/media/fitness app logo.1aef62902839a3a208cc.jpeg",
+    "main.css": "/static/css/main.91e49284.css",
+    "main.js": "/static/js/main.f677a5d1.js",
+    "static/media/logo.png": "/static/media/logo.1aef62902839a3a208cc.png",
     "static/media/Nationalrunningday.png": "/static/media/Nationalrunningday.a2bba312cb80e555efb3.png",
     "index.html": "/index.html",
-    "main.2997baa1.css.map": "/static/css/main.2997baa1.css.map",
-    "main.9d5b8a39.js.map": "/static/js/main.9d5b8a39.js.map"
+    "main.91e49284.css.map": "/static/css/main.91e49284.css.map",
+    "main.f677a5d1.js.map": "/static/js/main.f677a5d1.js.map"
   },
   "entrypoints": [
-    "static/css/main.2997baa1.css",
-    "static/js/main.9d5b8a39.js"
+    "static/css/main.91e49284.css",
+    "static/js/main.f677a5d1.js"
   ]
 }

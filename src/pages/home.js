@@ -19,6 +19,8 @@ import { MdOutlineLocalPhone } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 import { VscThreeBars } from "react-icons/vsc";
 import { auth } from "../config/config";
+import Lottie from "lottie-react";
+import running from "../assets/running.json";
 
 export const Home = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -85,6 +87,7 @@ export const Home = () => {
     localStorage.clear();
     navigate("/");
   };
+  console.log(name);
 
   return (
     <div
@@ -143,6 +146,11 @@ export const Home = () => {
               : "text-dark border-black"
           }`}
         >
+          <Lottie
+            className="menu_item running"
+            animationData={running}
+            loop={true}
+          />
           <div className="menu_item">
             <IoHomeOutline size="23px" />
             <h3 className="menu_i bi">Home</h3>
@@ -181,9 +189,9 @@ export const Home = () => {
             <div className="steps">
               <div className="steps_1">
                 <div
-                  className={`card bg-opacity-25 ${
+                  className={`card bg-opacity-50  ${
                     isDarkMode
-                      ? "text-light border-white bg-dark "
+                      ? "text-light border-white bg-bark"
                       : "text-dark border-black bg-light"
                   }`}
                 >
@@ -196,7 +204,7 @@ export const Home = () => {
               </div>
               <div className="steps_1">
                 <div
-                  className={`card bg-opacity-25  ${
+                  className={`card bg-opacity-50  ${
                     isDarkMode
                       ? "text-light border-white bg-dark"
                       : "text-dark border-black bg-light"
