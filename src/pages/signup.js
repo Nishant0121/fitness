@@ -2,7 +2,6 @@ import { auth, provider, db } from "../config/config";
 import { signInWithPopup, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { doc, setDoc } from "firebase/firestore";
-import logo from "../images/logo.png";
 import "../styles/style.css";
 import { useEffect } from "react";
 

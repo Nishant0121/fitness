@@ -12,6 +12,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+
 import { IoHomeOutline } from "react-icons/io5";
 import { FaPhoneAlt } from "react-icons/fa";
 import { BsInfoSquare } from "react-icons/bs";
@@ -21,58 +22,60 @@ import { VscThreeBars } from "react-icons/vsc";
 import { auth } from "../config/config";
 import Lottie from "lottie-react";
 import running from "../assets/running.json";
+import { useGetSteps } from "../hooks/useGetSteps";
 
 export const Home = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const { profilephoto } = useGetUserInfo();
   const { name } = useGetUserInfo();
+  const { steps } = useGetSteps();
   const navigate = useNavigate();
 
-  const data = [
-    {
-      name: "Mon",
-      uv: 4000,
-      Steps: 2400,
-      amt: 2400,
-    },
-    {
-      name: "Tues",
-      uv: 3000,
-      Steps: 1398,
-      amt: 2210,
-    },
-    {
-      name: "Wed",
-      uv: 2000,
-      Steps: 9800,
-      amt: 2290,
-    },
-    {
-      name: "Thrus",
-      uv: 2780,
-      Steps: 3908,
-      amt: 2000,
-    },
-    {
-      name: "Fri",
-      uv: 1890,
-      Steps: 4800,
-      amt: 2181,
-    },
-    {
-      name: "Sat",
-      uv: 2390,
-      Steps: 3800,
-      amt: 2500,
-    },
-    {
-      name: "Sun",
-      uv: 3490,
-      Steps: 4300,
-      amt: 2100,
-    },
-  ];
+  // const data = [
+  //   {
+  //     name: "Mon",
+  //     uv: 4000,
+  //     Steps: 2400,
+  //     amt: 2400,
+  //   },
+  //   {
+  //     name: "Tues",
+  //     uv: 3000,
+  //     Steps: 1398,
+  //     amt: 2210,
+  //   },
+  //   {
+  //     name: "Wed",
+  //     uv: 2000,
+  //     Steps: 9800,
+  //     amt: 2290,
+  //   },
+  //   {
+  //     name: "Thrus",
+  //     uv: 2780,
+  //     Steps: 3908,
+  //     amt: 2000,
+  //   },
+  //   {
+  //     name: "Fri",
+  //     uv: 1890,
+  //     Steps: 4800,
+  //     amt: 2181,
+  //   },
+  //   {
+  //     name: "Sat",
+  //     uv: 2390,
+  //     Steps: 3800,
+  //     amt: 2500,
+  //   },
+  //   {
+  //     name: "Sun",
+  //     uv: 3490,
+  //     Steps: 4300,
+  //     amt: 2100,
+  //   },
+  // ];
 
   const toggleMode = () => {
     setIsDarkMode((prevMode) => !prevMode);
@@ -87,7 +90,22 @@ export const Home = () => {
     localStorage.clear();
     navigate("/");
   };
-  console.log(name);
+  const weekdays = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const today = new Date().getDay(); // 0 (Sunday) to 6 (Saturday)
+  const currentDay = weekdays[today];
+
+  // Get the step count for the current day
+  const stepCount = steps.find((steps) => steps[currentDay])?.[currentDay] || 0;
+  // console.log(name);
+  // console.log(steps);
 
   return (
     <div
@@ -135,12 +153,12 @@ export const Home = () => {
       </nav>
 
       <div
-        className={`main d-flex ${
+        className={`main d-flex  ${
           isDarkMode ? "bg-black text-light" : "bg-light text-dark"
         }`}
       >
         <div
-          className={`menu rounded border bg-opacity-25 p-1 ${
+          className={`menu rounded flex flex-col justify-around border bg-opacity-25 p-1 ${
             isDarkMode
               ? "text-light border-white bg-dark"
               : "text-dark border-black"
@@ -198,10 +216,12 @@ export const Home = () => {
                   <h5 className="card-header text-centre">Daily Steps</h5>
                   <div className="card-body">
                     {/* <h5 className="card-title">Special title treatment</h5> */}
-                    <p className="card-text h3">5030</p>
+
+                    <p className="card-text h3">{stepCount}</p>
                   </div>
                 </div>
               </div>
+
               <div className="steps_1">
                 <div
                   className={`card bg-opacity-50  ${
@@ -229,7 +249,7 @@ export const Home = () => {
                 <BarChart
                   width={500}
                   height={300}
-                  data={data}
+                  data={steps}
                   margin={{
                     top: 5,
                     right: 30,
@@ -239,7 +259,7 @@ export const Home = () => {
                   barSize={20}
                 >
                   <XAxis
-                    dataKey="name"
+                    dataKey="Monday"
                     scale="point"
                     padding={{ left: 10, right: 10 }}
                   />
@@ -248,7 +268,7 @@ export const Home = () => {
                   <Legend />
                   <CartesianGrid strokeDasharray="3 3" />
                   <Bar
-                    dataKey="Steps"
+                    dataKey="Saturday"
                     fill="#2093ff"
                     background={{ fill: "#eee" }}
                   />
@@ -257,68 +277,134 @@ export const Home = () => {
             </div>
           </div>
 
-          <div className="day_steps d-flex">
-            <div className="steps_2">
-              <div
-                className={`card ${
-                  isDarkMode
-                    ? "text-light border-white"
-                    : "text-dark border-black"
-                }`}
-              >
-                <h5 className="card-header text-centre">Sunday</h5>
-                <div className="card-body">
-                  {/* <h5 className="card-title">Special title treatment</h5> */}
-                  <p className="card-text h3">4573</p>
-                </div>
+          {steps.map((steps) => {
+            const {
+              id,
+              Friday,
+              Saturday,
+              Sunday,
+              Monday,
+              Tuesday,
+              Wednesday,
+              Thursday,
+            } = steps;
+            return (
+              <div className="day_steps d-flex justify-between">
+                <li key={id} className="list-group-item listi d-flex">
+                  <div className="steps_2">
+                    <div
+                      className={`card bg-opacity-25 ${
+                        isDarkMode
+                          ? "text-light border-white bg-dark"
+                          : "text-dark border-black bg-light"
+                      }`}
+                    >
+                      <h5 className="card-header text-centre">Monday</h5>
+                      <div className="card-body">
+                        <p className="card-text h3">{Monday}</p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li key={id} className="list-group-item listi d-flex">
+                  <div className="steps_2">
+                    <div
+                      className={`card bg-opacity-25 ${
+                        isDarkMode
+                          ? "text-light border-white bg-dark"
+                          : "text-dark border-black bg-light"
+                      }`}
+                    >
+                      <h5 className="card-header text-centre">Tuesday</h5>
+                      <div className="card-body">
+                        <p className="card-text h3">{Tuesday}</p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li key={id} className="list-group-item listi d-flex">
+                  <div className="steps_2">
+                    <div
+                      className={`card bg-opacity-25 ${
+                        isDarkMode
+                          ? "text-light border-white bg-dark"
+                          : "text-dark border-black bg-light"
+                      }`}
+                    >
+                      <h5 className="card-header text-centre">Wednesday</h5>
+                      <div className="card-body">
+                        <p className="card-text h3">{Wednesday}</p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li key={id} className="list-group-item listi d-flex">
+                  <div className="steps_2">
+                    <div
+                      className={`card bg-opacity-25 ${
+                        isDarkMode
+                          ? "text-light border-white bg-dark"
+                          : "text-dark border-black bg-light"
+                      }`}
+                    >
+                      <h5 className="card-header text-centre">Thursday</h5>
+                      <div className="card-body">
+                        <p className="card-text h3">{Thursday}</p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li key={id} className="list-group-item listi d-flex">
+                  <div className="steps_2">
+                    <div
+                      className={`card bg-opacity-25 ${
+                        isDarkMode
+                          ? "text-light border-white bg-dark"
+                          : "text-dark border-black bg-light"
+                      }`}
+                    >
+                      <h5 className="card-header text-centre">Friday</h5>
+                      <div className="card-body">
+                        <p className="card-text h3">{Friday}</p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li key={id} className="list-group-item listi d-flex">
+                  <div className="steps_2">
+                    <div
+                      className={`card bg-opacity-25 ${
+                        isDarkMode
+                          ? "text-light border-white bg-dark"
+                          : "text-dark border-black bg-light"
+                      }`}
+                    >
+                      <h5 className="card-header text-centre">Saturday</h5>
+                      <div className="card-body">
+                        <p className="card-text h3">{Saturday}</p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li key={id} className="list-group-item listi d-flex">
+                  <div className="steps_2">
+                    <div
+                      className={`card bg-opacity-25 ${
+                        isDarkMode
+                          ? "text-light border-white bg-dark"
+                          : "text-dark border-black bg-light"
+                      }`}
+                    >
+                      <h5 className="card-header text-centre">Sunday</h5>
+                      <div className="card-body">
+                        <p className="card-text h3">{Sunday}</p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
               </div>
-            </div>
-            <div className="steps_2">
-              <div
-                className={`card bg-opacity-25 ${
-                  isDarkMode
-                    ? "text-light border-white bg-dark"
-                    : "text-dark border-black bg-light"
-                }`}
-              >
-                <h5 className="card-header text-centre">Monday</h5>
-                <div className="card-body">
-                  {/* <h5 className="card-title">Special title treatment</h5> */}
-                  <p className="card-text h3">4573</p>
-                </div>
-              </div>
-            </div>
-            <div className="steps_2">
-              <div
-                className={`card bg-opacity-25 ${
-                  isDarkMode
-                    ? "text-light border-white bg-dark"
-                    : "text-dark border-black bg-light"
-                }`}
-              >
-                <h5 className="card-header text-centre">Tuesdsay</h5>
-                <div className="card-body">
-                  {/* <h5 className="card-title">Special title treatment</h5> */}
-                  <p className="card-text h3">4573</p>
-                </div>
-              </div>
-            </div>
-            <div className="steps_2">
-              <div
-                className={`card bg-opacity-25 ${
-                  isDarkMode
-                    ? "text-light border-white bg-dark"
-                    : "text-dark border-black bg-light"
-                }`}
-              >
-                <h5 className="card-header text-centre">Wednesday</h5>
-                <div className="card-body">
-                  {/* <h5 className="card-title">Special title treatment</h5> */}
-                  <p className="card-text h3">4573</p>
-                </div>
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </div>
 

@@ -193,7 +193,7 @@ input:checked + .slider:before {
   margin-bottom: 5px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 }
 @media (max-width: 760px) {
   .Home {
